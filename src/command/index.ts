@@ -1,11 +1,6 @@
+import type { CLICommand } from "src/state.js";
 import { commandExit } from "./exit.js";
 import { commandHelp } from "./help.js";
-
-export type CLICommand = {
-  name: string;
-  description: string;
-  callback: () => void;
-};
 
 export function getCommands(): Record<string, CLICommand> {
   return {
