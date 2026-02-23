@@ -17,18 +17,28 @@ export function startREPL() {
 
   rl.prompt();
   rl.on("line", (input) => {
-    const clean = cleanInput(input);
-    if (clean.length !== 0) {
-      if (commands.hasOwnProperty(clean[0])) {
-        try {
-          commands[clean[0]].callback();
-        } catch (error) {
-          console.log("An error occured:", error);
-        }
-      } else {
-        console.log("Unknown command")
-      }
+    const words = cleanInput(input);
+
+    if (words.length === 0) {
+      rl.prompt();
+      return;
     }
+
+    const commandName = words[0];
+    const command = commands[commandName];
+
+    if (!command) {
+      console.log(`Unknown command: ${commandName}`);
+      rl.prompt();
+      return;
+    }
+
+    try {
+      command.callback();
+    } catch (error) {
+      console.log("An error occured:", error);
+    }
+
     rl.prompt();
   })
 }
