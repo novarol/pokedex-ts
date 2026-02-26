@@ -4,12 +4,12 @@ export function cleanInput(input: string): string[] {
   return input.trim().toLowerCase().split(" ").filter((x) => x !== "");
 }
 
-export function startREPL(state: State) {
+export async function startREPL(state: State) {
   const { readline, commands } = state;
 
   readline.prompt();
 
-  readline.on("line", (input) => {
+  readline.on("line", async (input) => {
     const words = cleanInput(input);
 
     if (words.length === 0) {
@@ -27,9 +27,13 @@ export function startREPL(state: State) {
     }
 
     try {
-      command.callback(state);
+      await command.callback(state);
     } catch (error) {
-      console.log("An error occured:", error);
+      if (error instanceof Error) {
+        console.log(error.message);
+      } else {
+        console.log("An error occured:", error);
+      }
     }
 
     readline.prompt();
