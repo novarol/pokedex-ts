@@ -12,12 +12,18 @@ export async function startREPL(state: State) {
   readline.on("line", async (input) => {
     const words = cleanInput(input);
 
-    if (words.length === 0) {
+    if (!words.length) {
       readline.prompt();
       return;
     }
 
-    const commandName = words[0];
+    const commandName = words.shift();
+
+    if (!commandName) {
+      readline.prompt();
+      return;
+    }
+
     const command = commands[commandName];
 
     if (!command) {
@@ -27,7 +33,7 @@ export async function startREPL(state: State) {
     }
 
     try {
-      await command.callback(state);
+      await command.callback(state, ...words);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);

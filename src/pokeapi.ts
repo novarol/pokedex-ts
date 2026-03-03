@@ -9,7 +9,7 @@ export class PokeAPI {
     this.#cache = new Cache(cacheInterval);
   }
 
-  async fetchLocations(pageURL?: string): Promise<ShallowLocations | void> {
+  async fetchLocations(pageURL?: string): Promise<ShallowLocations> {
     const url = pageURL || `${PokeAPI.baseURL}/location-area/`;
 
     const cachedResponse = this.#cache.get<ShallowLocations>(url);
@@ -27,7 +27,7 @@ export class PokeAPI {
 
       const locations: ShallowLocations = await response.json();
 
-      this.#cache.add<ShallowLocations>(url, locations)
+      this.#cache.add<ShallowLocations>(url, locations);
 
       return locations;
     } catch (error) {

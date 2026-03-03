@@ -1,4 +1,3 @@
-import { type ShallowLocations } from "src/pokeapi.js";
 import { type State } from "src/state.js";
 
 export async function commandMapForward (state: State) {
@@ -6,7 +5,7 @@ export async function commandMapForward (state: State) {
     throw new Error("you're on the last page");
   }
 
-  const locations = await state.pokeAPI.fetchLocations(state.nextLocationsURL) as ShallowLocations
+  const locations = await state.pokeAPI.fetchLocations(state.nextLocationsURL);
 
   state.nextLocationsURL = locations.next || "";
   state.prevLocationsURL = locations.previous || "";
@@ -21,7 +20,7 @@ export async function commandMapBack (state: State) {
     throw new Error("you're on the first page");
   }
   
-  const locations = await state.pokeAPI.fetchLocations(state.prevLocationsURL) as ShallowLocations
+  const locations = await state.pokeAPI.fetchLocations(state.prevLocationsURL);
 
   state.nextLocationsURL = locations.next || "";
   state.prevLocationsURL = locations.previous || "";
