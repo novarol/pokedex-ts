@@ -13,7 +13,6 @@ export async function commandInspect (state: State, ...args: string[]) {
     throw new Error("you have not caught that pokemon yet");
   }
 
-  console.log();
   console.log("Name:", pokemon.name);
   console.log("Height:", pokemon.height);
   console.log("Weight:", pokemon.weight);
@@ -24,7 +23,5 @@ export async function commandInspect (state: State, ...args: string[]) {
   console.log("Types:");
   for (const type of pokemon.types) {
     console.log(`  - ${type.type.name}`);
-  }
-  console.log();
-  
+  }  
 }
