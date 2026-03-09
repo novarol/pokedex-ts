@@ -12,7 +12,7 @@ export async function commandCatch (state: State, ...args: string[]) {
   const pokemon = await state.pokeAPI.fetchPokemon(pokemonName);
 
   const isCaught = tryCatch(pokemon.base_experience);
-  
+
   if (!isCaught) {
     console.log(`${pokemonName} escaped!`);
     return;
@@ -20,6 +20,8 @@ export async function commandCatch (state: State, ...args: string[]) {
 
   console.log(`${pokemonName} was caught!`);
   state.pokedex[pokemonName] = pokemon;
+
+  console.log("You may now inspect it with the inspect command.")
 }
 
 function tryCatch (baseExperience: number) {
