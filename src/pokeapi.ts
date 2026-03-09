@@ -68,6 +68,36 @@ export class PokeAPI {
       }
     }
   }
+
+  async fetchPokemon (pokemonName: string): Promise<Pokemon> {
+    const url = `${PokeAPI.baseURL}/pokemon/${pokemonName}`;
+
+    const cachedResponse = this.#cache.get<Pokemon>(url);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+
+      const pokemon: Pokemon = await response.json();
+
+      this.#cache.add<Pokemon>(url, pokemon)
+
+      return pokemon;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`An error occured fetching Pokemon: ${error.message}`);
+      } else {
+        throw new Error(`Unknown error: ${error}`);
+      }
+    }
+  }
 }
 
 export type ShallowLocations = {
@@ -129,6 +159,115 @@ export type Location = {
         name: string;
         url: string;
       };
+    }[];
+  }[];
+};
+
+export type Pokemon = {
+  id: number;
+  name: string;
+  base_experience: number;
+  height: number;
+  is_default: boolean;
+  order: number;
+  weight: number;
+  abilities: {
+    is_hidden: boolean;
+    slot: number;
+    ability: {
+      name: string;
+      url: string;
+    };
+  }[];
+  forms: {
+    name: string;
+    url: string;
+  }[];
+  game_indices: {
+    game_index: number;
+    version: {
+      name: string;
+      url: string;
+    };
+  }[];
+  held_items: {
+    item: {
+      name: string;
+      url: string;
+    };
+    version_details: {
+      rarity: number;
+      version: {
+        name: string;
+        url: string;
+      };
+    }[];
+  }[];
+  location_area_encounters: string;
+  moves: {
+    move: {
+      name: string;
+      url: string;
+    };
+    version_group_details: {
+      level_learned_at: number;
+      version_group: {
+        name: string;
+        url: string;
+      };
+      move_learn_method: {
+        name: string;
+        url: string;
+      };
+      order: number;
+    }[];
+  }[];
+  species: {
+    name: string;
+    url: string;
+  };
+  sprites: any;
+  cries: {
+    latest: string;
+    legacy: string;
+  };
+  stats: {
+    base_stat: number;
+    effort: number;
+    stat: {
+      name: string;
+      url: string;
+    };
+  }[];
+  types: {
+    slot: number;
+    type: {
+      name: string;
+      url: string;
+    };
+  }[];
+  past_types: {
+    generation: {
+      name: string;
+      url: string;
+    };
+    types: {
+      slot: number;
+      type: {
+        name: string;
+        url: string;
+      };
+    }[];
+  }[];
+  past_abilities: {
+    generation: {
+      name: string;
+      url: string;
+    };
+    abilities: {
+      ability: any;
+      is_hidden: boolean;
+      slot: number;
     }[];
   }[];
 };
